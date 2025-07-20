@@ -60,7 +60,8 @@ public class PaymentApplicationService {
             // 결제 승인 처리
             payment.approve(
                     new PaymentKey(tossResponse.getPaymentKey()),
-                    PaymentMethod.valueOf(tossResponse.getMethod().toUpperCase()),
+//                    PaymentMethod.valueOf(tossResponse.getMethod().toUpperCase()),
+                    PaymentMethod.fromString(tossResponse.getMethod()),
                     tossResponse.getRequestedAt(),
                     tossResponse.getApprovedAt(),
                     tossResponse.getReceipt() != null ? tossResponse.getReceipt().getUrl() : null
