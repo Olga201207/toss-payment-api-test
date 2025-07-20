@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 실패</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+    <div class="result-page">
+        <div class="error">
+            <h1>❌ 결제가 실패했습니다</h1>
+            <div class="error-info">
+                <p><strong>실패 사유:</strong> <span id="failReason"></span></p>
+                <p><strong>에러 코드:</strong> <span id="errorCode"></span></p>
+            </div>
+            <button onclick="location.href='/'" class="btn-secondary">다시 시도</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get('message') || '알 수 없는 오류가 발생했습니다.';
+    const code = urlParams.get('code') || 'UNKNOWN_ERROR';
+
+    document.getElementById('failReason').textContent = message;
+    document.getElementById('errorCode').textContent = code;
+</script>
+</body>
+</html>

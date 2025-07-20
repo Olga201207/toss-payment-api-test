@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>토스페이먼츠 결제 시스템</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://js.tosspayments.com/v1/payment"></script>
+</head>
+<body>
+<div class="container">
+    <div class="payment-form">
+        <h1>상품 주문</h1>
+        <form id="order-form">
+            <div class="form-group">
+                <label for="orderName">상품명</label>
+                <input type="text" id="orderName" name="orderName" value="토스 티셔츠" required>
+            </div>
+
+            <div class="form-group">
+                <label for="amount">금액</label>
+                <input type="number" id="amount" name="amount" value="50000" min="1000" required>
+            </div>
+
+            <div class="form-group">
+                <label for="customerName">고객명</label>
+                <input type="text" id="customerName" name="customerName" value="김토스" required>
+            </div>
+
+            <div class="form-group">
+                <label for="customerEmail">이메일</label>
+                <input type="email" id="customerEmail" name="customerEmail" value="test@toss.im" required>
+            </div>
+
+            <button type="submit" class="btn-primary">결제하기</button>
+        </form>
+    </div>
+</div>
+
+<script src="/js/payment.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+package com.ssafy.tosspay.common.config;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
+
+@Configuration
+public class TossPaymentsConfig {
+
+    @Value("${toss.payments.base-url}")
+    private String baseUrl;
+
+    @Bean
+    public WebClient webClient() {
+        return WebClient.builder()
+                .baseUrl(baseUrl)
+                .codecs(configurer -> configurer
+                        .defaultCodecs()
+                        .maxInMemorySize(1024 * 1024)) // 1MB
+                .build();
+    }
+}

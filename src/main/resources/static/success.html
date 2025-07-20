@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 완료</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+    <div class="result-page">
+        <div class="loading">
+            <h2>결제를 처리 중입니다...</h2>
+            <div class="spinner"></div>
+        </div>
+
+        <div class="success" style="display: none;">
+            <h1>✅ 결제가 완료되었습니다</h1>
+            <div class="payment-info">
+                <p><strong>주문번호:</strong> <span id="orderId"></span></p>
+                <p><strong>결제금액:</strong> <span id="amount"></span>원</p>
+                <p><strong>결제수단:</strong> <span id="method"></span></p>
+            </div>
+            <button onclick="location.href='/'" class="btn-primary">처음으로</button>
+        </div>
+
+        <div class="error" style="display: none;">
+            <h1>❌ 결제 처리 중 오류가 발생했습니다</h1>
+            <p id="error-message"></p>
+            <button onclick="location.href='/'" class="btn-secondary">처음으로</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // URL 파라미터 추출
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentKey = urlParams.get('paymentKey');
+    const orderId = urlParams.get('orderId');
+    const amount = urlParams.get('amount');
+
+    // 결제 승인 요청
+    async function confirmPayment() {
+        try {
+            const response = await fetch('/api/payments/confirm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    paymentKey: paymentKey,
+                    orderId: orderId,
+                    amount: parseFloat(amount)
+                })
+            });
+
+            const result = await response.json();
+
+            document.querySelector('.loading').style.display = 'none';
+
+            if (result.success) {
+                // 성공 화면 표시
+                document.getElementById('orderId').textContent = result.data.orderId;
+                document.getElementById('amount').textContent = Number(result.data.amount).toLocaleString();
+                document.getElementById('method').textContent = result.data.method || '카드';
+                document.querySelector('.success').style.display = 'block';
+            } else {
+                // 실패 화면 표시
+                document.getElementById('error-message').textContent = result.message;
+                document.querySelector('.error').style.display = 'block';
+            }
+
+        } catch (error) {
+            console.error('결제 승인 오류:', error);
+            document.querySelector('.loading').style.display = 'none';
+            document.getElementById('error-message').textContent = '결제 처리 중 오류가 발생했습니다.';
+            document.querySelector('.error').style.display = 'block';
+        }
+    }
+
+    // 페이지 로드 시 결제 승인 실행
+    if (paymentKey && orderId && amount) {
+        confirmPayment();
+    } else {
+        document.querySelector('.loading').style.display = 'none';
+        document.getElementById('error-message').textContent = '잘못된 결제 정보입니다.';
+        document.querySelector('.error').style.display = 'block';
+    }
+</script>
+</body>
+</html>
